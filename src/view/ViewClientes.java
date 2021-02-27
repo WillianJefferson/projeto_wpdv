@@ -21,16 +21,18 @@ import java.util.ArrayList;
 
 public class ViewClientes extends javax.swing.JFrame {
 //IncluirDAO DAO;
-PesquisarDAO DAOPES;    
+PesquisarDAO DAOPES = new PesquisarDAO();    
 IncluirDAOClientes DAOC;
 ModelClientes objpes = new ModelClientes();
 //PesquisarDAOClientes controllerCliente = new PesquisarDAOClientes();
 ArrayList<ModelClientes> listaModelCliente = new ArrayList<>();
+
+String tipoCadastro;
     
     /** Creates new form Clientes */
     public ViewClientes() {
         initComponents();
-        this.carregarClientes();
+        carregarClientes();
         //setLocationRelativeTo(null);
 
     }
@@ -252,31 +254,21 @@ ArrayList<ModelClientes> listaModelCliente = new ArrayList<>();
     
     
     private void btAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAlterarActionPerformed
-        
+        habilitarCampos();
+        recuperarCliente();
+        tipoCadastro = "alteracao";
     }//GEN-LAST:event_btAlterarActionPerformed
     
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
-    objpes = new ModelClientes();
-       
-     objpes.setNome(tfNome.getText());
-     objpes.setEndereco(tfEndereco.getText());
-     objpes.setCidade(tfCidade.getText());
-     objpes.setEmail(tfEmail.getText());
-     objpes.setUf(tfUf.getText());
-     objpes.setCep(tfCep.getText());
-     objpes.setTelefone(tfTelefone.getText());
-     
-     DAOC = new IncluirDAOClientes();
-    try {
-        if(DAOC.Incluir(objpes)){
-            JOptionPane.showMessageDialog(this,"Registro salvo com sucesso!");
-         
-        }        
-        
-// TODO add your handling code here:
-    }catch (SQLException ex){
-        //Logger.getLogger(ViewProdutos.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        if (tipoCadastro.equals("novo")){
+            salvarCliente();
+        } else if(tipoCadastro.equals("alteracao")){
+            try {
+                alteraCliente();
+            } catch (SQLException ex) {
+                Logger.getLogger(ViewClientes.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_btSalvarActionPerformed
     
     
@@ -310,6 +302,31 @@ ArrayList<ModelClientes> listaModelCliente = new ArrayList<>();
         
     }
     
+    private boolean recuperarCliente() {
+        //recebe a linha selecionada
+        int linha = this.tbClientes.getSelectedRow();
+
+        //pega o codigo do cliente na linha selecionada
+        int codigo = (Integer) tbClientes.getValueAt(linha, 0);
+
+        try {
+            //recupera os dados do banco
+            objpes = DAOPES.Pesquisar(codigo);
+            //seta os dados na interface
+            this.tfId.setText(String.valueOf(objpes.getId()));
+            this.tfNome.setText(objpes.getNome());
+            this.tfEndereco.setText(objpes.getEndereco());
+            this.tfEmail.setText(objpes.getEmail());
+            this.tfCidade.setText(objpes.getCidade());
+            this.tfUf.setText(objpes.getUf());
+            this.tfCep.setText(objpes.getCep());
+            this.tfTelefone.setText(objpes.getTelefone());
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Código inválido ou nenhum registro selecionado", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+    }
     
     
     
@@ -333,9 +350,58 @@ ArrayList<ModelClientes> listaModelCliente = new ArrayList<>();
             });
         }
     }
-    private void btNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoActionPerformed
+    
+    
+    private void salvarCliente(){
+     objpes = new ModelClientes();
+       
+     objpes.setNome(tfNome.getText());
+     objpes.setEndereco(tfEndereco.getText());
+     objpes.setCidade(tfCidade.getText());
+     objpes.setEmail(tfEmail.getText());
+     objpes.setUf(tfUf.getText());
+     objpes.setCep(tfCep.getText());
+     objpes.setTelefone(tfTelefone.getText());
+     
+     DAOC = new IncluirDAOClientes();
+    try {
+        if(DAOC.Incluir(objpes)){
+            JOptionPane.showMessageDialog(this,"Registro salvo com sucesso!");
+        this.carregarClientes(); 
+        }        
         
+// TODO add your handling code here:
+    }catch (SQLException ex){
+        //Logger.getLogger(ViewProdutos.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    }
+    
+    private boolean alteraCliente() throws SQLException {
+        objpes.setId(Integer.parseInt(this.tfId.getText()));
+        objpes.setNome(this.tfNome.getText());
+        objpes.setEndereco(this.tfEndereco.getText());
+        objpes.setEmail(this.tfEmail.getText());
+        objpes.setCidade(this.tfCidade.getText());
+        objpes.setUf(this.tfUf.getText());
+        objpes.setCep(this.tfCep.getText());
+        objpes.setTelefone(this.tfTelefone.getText());
+
+        //alterar 
+        if (DAOPES.atualizarClienteDAO(objpes)) {
+            JOptionPane.showMessageDialog(this, "Registro alterado com sucesso!");
+            this.desabilitarCampos();
+            this.carregarClientes();
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(this, "Erro ao alterar os dados!", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+    
+    
+    private void btNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoActionPerformed
         this.habilitarCampos();
+        tipoCadastro = "novo";
     }//GEN-LAST:event_btNovoActionPerformed
         
     private void btPesquisaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisaClienteActionPerformed

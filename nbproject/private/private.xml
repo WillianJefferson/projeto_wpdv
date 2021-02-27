@@ -3,8 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/projeto/wpdv/src/controller/PesquisarDAO.java</file>
-            <file>file:/C:/projeto/wpdv/src/view/ViewClientes.java</file>
+            <file>file:/C:/projeto/wpdv/projeto_wpdv/src/controller/PesquisarDAO.java</file>
+            <file>file:/C:/projeto/wpdv/projeto_wpdv/src/conexoes/Conexao.java</file>
+            <file>file:/C:/projeto/wpdv/projeto_wpdv/src/view/ViewClientes.java</file>
         </group>
     </open-files>
 </project-private>

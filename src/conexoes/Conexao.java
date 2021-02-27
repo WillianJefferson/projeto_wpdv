@@ -14,7 +14,7 @@ public class Conexao {
 
           
 Class.forName("org.sqlite.JDBC");
-String url = "jdbc:sqlite:C://projeto/wpdv/db/sqlitejava.db";  
+String url = "jdbc:sqlite:C://projeto/wpdv/projeto_wpdv/db/sqlitejava.db";  
             
           conexao = DriverManager.getConnection(url);
           System.out.println("conexao ok");

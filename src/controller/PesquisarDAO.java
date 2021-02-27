@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+
+
 public class PesquisarDAO {
     public ModelClientes Pesquisar(int id) throws SQLException
     {
@@ -75,6 +77,40 @@ public class PesquisarDAO {
       
         return listamodelCliente;
     }
+    
+ 
+public boolean atualizarClienteDAO(ModelClientes pModelCliente) throws SQLException
+    {
+
+        //Conexao conexao = new ControllerBanco().get();
+     try {
+        Conexao conexao = new Conexao();
+        PreparedStatement pstmt =
+       conexao.getConexao().prepareStatement(
+        "UPDATE clientes SET "
+                    + "id = '" + pModelCliente.getId() + "',"
+                    + "nome = '" + pModelCliente.getNome() + "',"
+                    + "endereco = '" + pModelCliente.getEndereco() + "',"
+                    + "email = '" + pModelCliente.getEmail() + "',"
+                    + "cidade = '" + pModelCliente.getCidade() + "',"
+                    + "uf = '" + pModelCliente.getUf() + "',"
+                    + "cep = '" + pModelCliente.getCep() + "',"
+                    + "telefone = '" + pModelCliente.getTelefone() + "'"
+                + " WHERE "
+                    + "id = '" + pModelCliente.getId() + "'"
+                + ";"
+            );
+            //objpes.setIdade(rs.getInt("idade"));
+        
+        //ResultSet rs = pstmt.executeQuery();
+        return true;
+        
+        
+        }catch(Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }    
     
     
     
